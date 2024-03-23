@@ -1,7 +1,5 @@
 import { completion } from "./utils/completions";
 
-console.log("Hello via Bun!");
-
 const systemPrompts = {
 	standard: "Hello world!",
 };
@@ -30,5 +28,10 @@ class Fourier {
 	const fourier = new Fourier({ model: "gpt4-turbo", prompt: "standard" });
 	await fourier.call("Hello world!");
 
-	const query = await completion["gp4-turbo"]();
+	const query = await completion["gp4-turbo"](
+		"Tell me a fun fact about Fourier!",
+		50,
+	);
+
+	console.log(query);
 })();
