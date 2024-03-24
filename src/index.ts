@@ -34,6 +34,10 @@ export function streamResponse(response: Response) {
 					}
 
 					buffer += decoder.decode(value, { stream: true });
+					if (!buffer) {
+						return;
+					}
+
 					const parts = buffer.split("\n");
 					buffer = parts.pop() || "";
 
@@ -83,7 +87,11 @@ class Fourier {
 			if (value) {
 				// Assuming 'value' is a string that looks like:
 				// 'data: {...json...}'
-				const jsonStr = value.slice(6);
+				const jsonStr = value.replace(/data:\s/, "")
+
+				if (jsonStr === "[DONE]") {
+					break;
+				}
 
 				try {
 					const jsonObj = JSON.parse(jsonStr);
@@ -109,5 +117,4 @@ class Fourier {
 	const prompt = "Tell me a fun fact about Fourier!";
 	const res = await model.stream(prompt);
 
-	console.log({ res });
 })();
