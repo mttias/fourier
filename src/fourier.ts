@@ -47,7 +47,7 @@ export class Fourier {
 					const jsonObj = JSON.parse(jsonStr);
 
 					const deltaContent = jsonObj.choices[0].delta.content;
-					console.log(deltaContent); // Log the delta content
+					// console.log(deltaContent); // Log the delta content
 
 					result += deltaContent;
 				} catch (e) {
