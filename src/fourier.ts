@@ -13,7 +13,12 @@ export class Fourier {
 		this.config = config;
 	}
 
-	async call(prompt: string) {
+	/**
+	 * Call the API with a prompt, recieve the response asynchronously 
+	 * @param prompt a string of the user prompt
+	 * @returns Promise<string> with the API response message
+	 */
+	async call(prompt: string): Promise<string> {
 		return (
 			completion[this.config.model](prompt)
 				// @ts-expect-error
@@ -22,6 +27,11 @@ export class Fourier {
 		);
 	}
 
+	/**
+	 * Streams the response as a generator function
+	 * @param prompt a string of the user prompt
+	 * @returns a yield of the latest response token
+	 */
 	async *stream(prompt: string) {
 		const response = await completion[this.config.model](prompt, true);
 		const stream = streamResponse(response as Response);
