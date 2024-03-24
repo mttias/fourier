@@ -1,7 +1,6 @@
 import { completion } from "./utils/completions";
 import { streamResponse } from "./utils/streamResponse";
 
-
 type Config = {
 	model: keyof typeof completion;
 	stream?: boolean;
@@ -14,7 +13,7 @@ export class Fourier {
 	}
 
 	/**
-	 * Call the API with a prompt, recieve the response asynchronously 
+	 * Call the API with a prompt, recieve the response asynchronously
 	 * @param prompt a string of the user prompt
 	 * @returns Promise<string> with the API response message
 	 */
@@ -23,7 +22,11 @@ export class Fourier {
 			completion[this.config.model](prompt)
 				// @ts-expect-error
 				.then((response) => response.json())
-				.then((data) => data?.choices?.at(0)?.message?.content)
+				.then(
+					(data) =>
+						data?.choices?.at(0)?.message?.content ??
+						data?.choices?.at(0)?.text,
+				)
 		);
 	}
 
@@ -37,19 +40,19 @@ export class Fourier {
 		const stream = streamResponse(response as Response);
 		const reader = stream.getReader();
 
-		let res = ""
+		const res = "";
 
 		while (true) {
 			const { done, value } = await reader.read();
+
 			if (done) {
 				break;
 			}
 
 			if (value) {
-
 				// Assuming 'value' is a string that looks like:
 				// 'data: {...json...}'
-				const jsonStr = value.replace(/data:\s/, "")
+				const jsonStr = value.replace(/data:\s/, "");
 
 				if (jsonStr === "[DONE]") {
 					break;

@@ -22,3 +22,5 @@ export type Completion = {
 		};
 	}[];
 };
+
+export type OAIEndpoint = "chat" | "completion"
