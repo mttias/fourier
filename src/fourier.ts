@@ -1,8 +1,8 @@
-import { completion } from "./utils/completions";
+import { model } from "./utils/models";
 import { streamResponse } from "./utils/streamResponse";
 
 type Config = {
-	model: keyof typeof completion;
+	model: keyof typeof model;
 	stream?: boolean;
 };
 
@@ -19,7 +19,7 @@ export class Fourier {
 	 */
 	async call(prompt: string): Promise<string> {
 		return (
-			completion[this.config.model](prompt)
+			model[this.config.model](prompt)
 				// @ts-expect-error
 				.then((response) => response.json())
 				.then(
@@ -36,7 +36,7 @@ export class Fourier {
 	 * @returns a yield of the latest response token
 	 */
 	async *stream(prompt: string) {
-		const response = await completion[this.config.model](prompt, true);
+		const response = await model[this.config.model](prompt, true);
 		const stream = streamResponse(response as Response);
 		const reader = stream.getReader();
 

@@ -1,9 +1,7 @@
 import { Fourier } from "./fourier";
 
-const queue = [];
-
 (async () => {
-	const model = new Fourier({ model: "gpt-3.5-turbo-instruct" });
+	const model = new Fourier({ model: "gpt-4-0125-preview" });
 	const prompt = "Tell me a fun fact about Fourier!";
 
 	const res = await model.call(prompt);
