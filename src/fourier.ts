@@ -22,12 +22,13 @@ export class Fourier {
 		);
 	}
 
-	async stream(prompt: string) {
+	async *stream(prompt: string) {
 		const response = await completion[this.config.model](prompt, true);
 		const stream = streamResponse(response as Response);
 		const reader = stream.getReader();
 
-		let result = "";
+		let res = ""
+
 		while (true) {
 			const { done, value } = await reader.read();
 			if (done) {
@@ -35,6 +36,7 @@ export class Fourier {
 			}
 
 			if (value) {
+
 				// Assuming 'value' is a string that looks like:
 				// 'data: {...json...}'
 				const jsonStr = value.replace(/data:\s/, "")
@@ -47,16 +49,12 @@ export class Fourier {
 					const jsonObj = JSON.parse(jsonStr);
 
 					const deltaContent = jsonObj.choices[0].delta.content;
-					// console.log(deltaContent); // Log the delta content
 
-					result += deltaContent;
+					yield deltaContent;
 				} catch (e) {
 					console.error("Failed to parse JSON or access delta content", e);
 				}
 			}
-			result += value;
 		}
-
-		return result;
 	}
 }
