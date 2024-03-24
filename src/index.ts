@@ -10,10 +10,4 @@ const queue = [];
 
 	const res = await model.call(prompt)
 
-	console.log({res})
-
-	for await (const delta of model.stream(prompt)) {
-		queue.push(delta)
-    }
-
 })();
