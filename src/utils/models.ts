@@ -1,6 +1,7 @@
 import { createCompletionFunction } from "./createCompletionFunction";
 
 export const model = {
+	"davinci-002": createCompletionFunction("davinci-002", "completion"),
 	"gpt-3.5-turbo": createCompletionFunction("gpt-3.5-turbo", "chat"),
 	"gpt-3.5-turbo-0125": createCompletionFunction("gpt-3.5-turbo-0125", "chat"),
 	"gpt-3.5-turbo-instruct": createCompletionFunction(
