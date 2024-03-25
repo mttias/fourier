@@ -6,6 +6,7 @@ export type Message = {
 export type CompletionFunction = (
 	message: string,
 	stream?: boolean,
+	temperature?: number,
 	maxTokens?: number,
 	history?: Message[],
 ) => Promise<
@@ -23,7 +24,6 @@ export type Completion = {
 	}[];
 };
 
-export type OAIEndpoint = "chat" | "completion";
-export type AnthropicEndpoint = "message" | "completion";
+export type endpoint = "chat" | "completion" | "message";
 
 export type Provider = "OpenAI" | "Anthropic";

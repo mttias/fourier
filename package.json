@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "bun": "^1.0.35"
+    "bun": "^1.0.35",
+    "ts-pattern": "^5.0.8"
   }
 }

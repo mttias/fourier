@@ -1,25 +1,32 @@
 import { anthropic, openai } from "./payload";
 import type * as types from "./types";
+import { match } from "ts-pattern";
 
 export function createCompletionFunction(
 	model: string,
-	type: types.OAIEndpoint | types.AnthropicEndpoint = "chat",
+	type: types.endpoint,
 	provider: types.Provider = "OpenAI",
 ): types.CompletionFunction {
 	return (
 		prompt: string,
-		stream,
+		stream = false,
+		temperature = 0.8,
 		maxTokens = 50,
 		history?: types.Message[],
 	) => {
-		return provider === "OpenAI"
-			? openai(prompt, type as types.OAIEndpoint, model, maxTokens, stream)
-			: anthropic(
-					prompt,
-					model,
-					maxTokens,
-					type as types.AnthropicEndpoint,
-					stream,
-				);
+		const input = {
+			prompt,
+			model,
+			type,
+			temperature,
+			maxTokens,
+			history,
+			stream,
+		};
+
+		return match(provider)
+			.with("OpenAI", () => openai(input))
+			.with("Anthropic", () => anthropic(input))
+			.run();
 	};
 }

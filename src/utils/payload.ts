@@ -1,14 +1,17 @@
 import type * as types from "./types";
 
-export const openai = (
-	prompt: string,
-	type: types.OAIEndpoint,
-	model: string,
-	maxTokens: number,
-	stream = false,
-) => {
-	const input =
-		type === "chat"
+type Payload = {
+	prompt: string;
+	model: string;
+	maxTokens: number;
+	type: types.endpoint;
+	temperature: number;
+	stream: boolean;
+};
+
+export const openai = (config: Payload) => {
+	const prompt =
+		config.type === "chat"
 			? {
 					messages: [
 						{
@@ -18,14 +21,14 @@ export const openai = (
 						},
 						{
 							role: "user",
-							content: prompt,
+							content: config.prompt,
 						},
 					],
 				}
-			: { prompt };
+			: { prompt: config.prompt };
 
 	const link =
-		type === "chat"
+		config.type === "chat"
 			? "https://api.openai.com/v1/chat/completions"
 			: "https://api.openai.com/v1/completions";
 
@@ -36,37 +39,41 @@ export const openai = (
 			Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
 		},
 		body: JSON.stringify({
-			stream: stream,
-			model: model,
-			max_tokens: maxTokens,
-			...input,
+			stream: config.stream,
+			model: config.model,
+			max_tokens: config.maxTokens,
+			temperature: config.temperature,
+			...prompt,
 		}),
 	});
 
 	return q;
 };
 
-export const anthropic = (
-	prompt: string,
-	model: string,
-	maxTokens: number,
-	type: types.AnthropicEndpoint = "message",
-	stream = false,
-) => {
-	const input =
-		type === "message"
+export const anthropic = (config: Payload) => {
+	const prompt =
+		config.type === "message"
 			? {
 					messages: [
 						{
 							role: "user",
-							content: prompt,
+							content: config.prompt,
 						},
 					],
 				}
-			: { prompt };
+			: { prompt: `\n\nHuman: ${config.prompt}\n\nAssistant:` };
+
+	const max_tokens =
+		config.type === "message"
+			? {
+					max_tokens: config.maxTokens,
+				}
+			: {
+					max_tokens_to_sample: config.maxTokens,
+				};
 
 	const link =
-		type === "message"
+		config.type === "message"
 			? "https://api.anthropic.com/v1/messages"
 			: "https://api.anthropic.com/v1/complete";
 
@@ -78,10 +85,11 @@ export const anthropic = (
 			"anthropic-version": "2023-06-01",
 		},
 		body: JSON.stringify({
-			stream: stream,
-			model: model,
-			max_tokens: maxTokens,
-			...input,
+			stream: config.stream,
+			model: config.model,
+			temperature: config.temperature,
+			...max_tokens,
+			...prompt,
 		}),
 	});
 

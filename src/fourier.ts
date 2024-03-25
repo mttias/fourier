@@ -3,7 +3,7 @@ import { streamResponse } from "./utils/streamResponse";
 
 type Config = {
 	model: keyof typeof model;
-	stream?: boolean;
+	temperature?: number;
 };
 
 export class Fourier {
@@ -19,7 +19,7 @@ export class Fourier {
 	 */
 	async call(prompt: string): Promise<string> {
 		return (
-			model[this.config.model](prompt)
+			model[this.config.model](prompt, false, this.config.temperature)
 				// @ts-expect-error
 				.then((response) => response.json())
 				.then((data) => {
@@ -49,7 +49,11 @@ export class Fourier {
 	 * @returns a yield of the latest response token
 	 */
 	async *stream(prompt: string) {
-		const response = await model[this.config.model](prompt, true);
+		const response = await model[this.config.model](
+			prompt,
+			true,
+			this.config.temperature,
+		);
 		const stream = streamResponse(response as Response);
 		const reader = stream.getReader();
 
