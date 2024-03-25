@@ -1,6 +1,6 @@
 import type * as types from "./types";
 
-export const payload = (
+export const openai = (
 	prompt: string,
 	type: types.OAIEndpoint,
 	model: string,
@@ -44,4 +44,46 @@ export const payload = (
 	});
 
 	return q;
+};
+
+export const anthropic = (
+	prompt: string,
+	model: string,
+	maxTokens: number,
+	type: types.AnthropicEndpoint = "message",
+	stream = false,
+) => {
+	const input =
+		type === "message"
+			? {
+					messages: [
+						{
+							role: "user",
+							content: prompt,
+						},
+					],
+				}
+			: { prompt };
+
+	const link =
+		type === "message"
+			? "https://api.anthropic.com/v1/messages"
+			: "https://api.anthropic.com/v1/complete";
+
+	const query = fetch(link, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"x-api-key": `${process.env.ANTHROPIC_API_KEY}`,
+			"anthropic-version": "2023-06-01",
+		},
+		body: JSON.stringify({
+			stream: stream,
+			model: model,
+			max_tokens: maxTokens,
+			...input,
+		}),
+	});
+
+	return query;
 };

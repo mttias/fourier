@@ -23,4 +23,7 @@ export type Completion = {
 	}[];
 };
 
-export type OAIEndpoint = "chat" | "completion"
+export type OAIEndpoint = "chat" | "completion";
+export type AnthropicEndpoint = "message" | "completion";
+
+export type Provider = "OpenAI" | "Anthropic";

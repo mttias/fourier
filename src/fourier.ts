@@ -22,11 +22,24 @@ export class Fourier {
 			model[this.config.model](prompt)
 				// @ts-expect-error
 				.then((response) => response.json())
-				.then(
-					(data) =>
+				.then((data) => {
+					const content =
 						data?.choices?.at(0)?.message?.content ??
-						data?.choices?.at(0)?.text,
-				)
+						data?.choices?.at(0)?.text ??
+						data?.content?.at(0)?.text ??
+						data?.completion;
+
+					if (content === undefined) {
+						console.error(data);
+
+						return null;
+					}
+
+					return content;
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				})
 		);
 	}
 

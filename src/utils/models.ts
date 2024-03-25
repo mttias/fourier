@@ -10,4 +10,9 @@ export const model = {
 	"gpt-4-turbo-preview": createCompletionFunction("gpt-4-turbo-preview"),
 	"gpt-4": createCompletionFunction("gpt-4-turbo-preview"),
 	"gpt-4-32k": createCompletionFunction("gpt-4-32k"),
+	"claude-3-opus-20240229": createCompletionFunction(
+		"claude-3-opus-20240229",
+		"message",
+		"Anthropic",
+	),
 };
