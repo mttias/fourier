@@ -1,13 +1,12 @@
 import { Fourier } from "./fourier";
 
 (async () => {
-	const model = new Fourier({
-		model: "davinci-002",
-		temperature: 0.6,
-	});
+	const queue = [];
+	const model = new Fourier({ model: "gpt-3.5-turbo" });
 	const prompt = "Tell me a fun fact about Fourier!";
 
-	const res = await model.call(prompt);
-
-	console.log(res);
+	for await (const delta of model.stream(prompt)) {
+		queue.push(delta);
+		console.log({ delta });
+	}
 })();

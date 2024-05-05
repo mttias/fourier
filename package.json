@@ -1,5 +1,5 @@
 {
-  "name": "fourier",
+  "name": "@mttias/fourier",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
@@ -11,5 +11,27 @@
   "dependencies": {
     "bun": "^1.0.35",
     "ts-pattern": "^5.0.8"
-  }
+  },
+  "version": "1.0.0",
+  "description": "A universal API for OpenAI and Anthropic's language models.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "bun test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mttias/fourier.git"
+  },
+  "keywords": [
+    "anthropic",
+    "openai",
+    "universal",
+    "api"
+  ],
+  "author": "mttias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mttias/fourier/issues"
+  },
+  "homepage": "https://github.com/mttias/fourier#readme"
 }
