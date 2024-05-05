@@ -1,5 +1,5 @@
 {
-  "name": "@mttias/fourier",
+  "name": "fourier-universal",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
